@@ -14,9 +14,15 @@
 </head>
 
 <body>
-  <h1>Home Page</h1>
-  <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
-
+  <div style="text-align: center;">
+    <h1>Home Page</h1>
+    <br>
+    <a href="{% url 'get-weather' %}" class="btn btn-primary">Get Weather</a>
+    <br>
+    <br>
+    <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
+  </div>
+  
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
