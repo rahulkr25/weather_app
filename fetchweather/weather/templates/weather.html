@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Weather Information</title>
+</head>
+
+<body>
+    <h1>Weather Information</h1>
+    <table>
+        <tr>
+            <th>City</th>
+            <th>Temperature</th>
+            <th>Humidity</th>
+            <th>Weather Description</th>
+        </tr>
+        {% for weather in weather_data %}
+        <tr>
+            <td>{{ weather.city }}</td>
+            <td>{{ weather.temperature }}</td>
+            <td>{{ weather.humidity }}</td>
+            <td>{{ weather.weather_description }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No data available</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if weather_data.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ weather_data.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ weather_data.number }} of {{ weather_data.paginator.num_pages }}.
+            </span>
+
+            {% if weather_data.has_next %}
+            <a href="?page={{ weather_data.next_page_number }}">next</a>
+            <a href="?page={{ weather_data.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</body>
+
+</html>
