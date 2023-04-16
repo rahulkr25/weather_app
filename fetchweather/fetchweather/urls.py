@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from weather import views
-
+# DEFINING Endpoints for difeerent pages
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.SignupPage, name="signup"),

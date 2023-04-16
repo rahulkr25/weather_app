@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.cache import cache
 
-
+# For storing required fields of weather data.
 class Weather(models.Model):
     city = models.CharField(max_length=255)
     temperature = models.FloatField()

@@ -8,11 +8,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.cache import cache
 
-
+# HomePage
 @login_required(login_url="login")
 def HomePage(request):
     return render(request, "home.html")
 
+# SignupPage-> Variables are storing user inputs.
 def SignupPage(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -29,6 +30,7 @@ def SignupPage(request):
 
     return render(request, "signup.html")
 
+# LoginPage-> Taking user inputs and authenticating 
 def LoginPage(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -42,14 +44,16 @@ def LoginPage(request):
 
     return render(request, "login.html")
 
+#Logout Page
 def LogoutPage(request):
     logout(request)
     return redirect("login")
 
-
+#Fetches raw weather data from openweather.
 @login_required(login_url="login")
 def get_weather(request):
 
+    #Cache Enabled to store response in database
     caching_enabled = cache.get("is_cache_enabled")
     if caching_enabled is None:
 
@@ -59,7 +63,7 @@ def get_weather(request):
         
         api_key = "5ec11febc38413ca3a46b9e14c10bbc0"
         weather_data = []
-
+        # Loop to modify request for each city
         for city in cities:
             url = "http://api.openweathermap.org/data/2.5/weather?q={}&appid={}&units=imperial".format(
                 city, api_key
@@ -67,8 +71,8 @@ def get_weather(request):
             response = requests.get(url)
             weather_data.append(response.json())
 
-        # Save weather data to database
-        Weather.objects.all().delete()  # Remove existing weather data from database
+        # Remove existing weather data from database  
+        Weather.objects.all().delete()  
         for data in weather_data:
             try:
                 city = data["name"]
@@ -82,17 +86,19 @@ def get_weather(request):
                     humidity=humidity,
                     weather_description=weather_description,
                 )
+                # Save weather data of each city to database
                 weather.save()
             except:
-                 #print('Data Not available for certain cities])
+                 # For handling errors if no response
                  pass
+        # Setting time duration for cache.[seconds]
         cache.set("is_cache_enabled", True, (60*30))
 
     # Retrieve weather data from database and paginate
     weather_data = Weather.objects.all()
     paginator = Paginator(
         weather_data, 10
-    )  # You can update the number of items per page here
+    ) 
     page = request.GET.get("page")
     weather_data = paginator.get_page(page)
 
